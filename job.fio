@@ -6,7 +6,7 @@ time_based
 runtime=30
 ramp_time=5
 
-[matt-henniges-estimation-test]
+[mh-estimation-test]
 wait_for_previous
 randrepeat=0
 direct=1
@@ -19,6 +19,38 @@ rwmixread=85
 group_reporting
 norandommap
 fallocate=none
+
+# https://cloud.google.com/compute/docs/disks/optimizing-local-ssd-performance#comparing_local_ssd_performance
+[google-iops-randread-perf]
+wait_for_previous
+randrepeat=0
+iodepth=128
+invalidate=1
+verify=0
+verify_fatal=0
+numjobs=4
+rw=randread
+blocksize=4k
+group_reporting
+
+# https://cloud.google.com/compute/docs/disks/optimizing-local-ssd-performance#comparing_local_ssd_performance
+[google-iops-randwrite-perf]
+wait_for_previous
+randrepeat=0
+iodepth=128
+invalidate=1
+verify=0
+verify_fatal=0
+rw=randwrite
+blocksize=4k
+numjobs=4
+group_reporting
+
+[random-read-4k-blocks-1c]
+wait_for_previous
+rw=randread
+blocksize=4k
+iodepth=1
 
 [random-read-4k-blocks-2c]
 wait_for_previous
@@ -139,130 +171,130 @@ rw=randread
 blocksize=16k
 iodepth=64
 
-[sequential-read-4k-blocks-1c]
-wait_for_previous
-rw=read
-blocksize=4k
-iodepth=1
-
-[sequential-read-4k-blocks-2c]
-wait_for_previous
-rw=read
-blocksize=4k
-iodepth=2
-
-[sequential-read-4k-blocks-4c]
-wait_for_previous
-rw=read
-blocksize=4k
-iodepth=4
-
-[sequential-read-4k-blocks-8c]
-wait_for_previous
-rw=read
-blocksize=4k
-iodepth=8
-
-[sequential-read-4k-blocks-16c]
-wait_for_previous
-rw=read
-blocksize=4k
-iodepth=16
-
-[sequential-read-4k-blocks-32c]
-wait_for_previous
-rw=read
-blocksize=4k
-iodepth=32
-
-[sequential-read-4k-blocks-64c]
-wait_for_previous
-rw=read
-blocksize=4k
-iodepth=64
-
-[sequential-read-8k-blocks-1c]
-wait_for_previous
-rw=read
-blocksize=8k
-iodepth=1
-
-[sequential-read-8k-blocks-2c]
-wait_for_previous
-rw=read
-blocksize=8k
-iodepth=2
-
-[sequential-read-8k-blocks-4c]
-wait_for_previous
-rw=read
-blocksize=8k
-iodepth=4
-
-[sequential-read-8k-blocks-8c]
-wait_for_previous
-rw=read
-blocksize=8k
-iodepth=8
-
-[sequential-read-8k-blocks-16c]
-wait_for_previous
-rw=read
-blocksize=8k
-iodepth=16
-
-[sequential-read-8k-blocks-32c]
-wait_for_previous
-rw=read
-blocksize=8k
-iodepth=32
-
-[sequential-read-8k-blocks-64c]
-wait_for_previous
-rw=read
-blocksize=8k
-iodepth=64
-
-[sequential-read-16k-blocks-1c]
-wait_for_previous
-rw=read
-blocksize=16k
-iodepth=1
-
-[sequential-read-16k-blocks-2c]
-wait_for_previous
-rw=read
-blocksize=16k
-iodepth=2
-
-[sequential-read-16k-blocks-4c]
-wait_for_previous
-rw=read
-blocksize=16k
-iodepth=4
-
-[sequential-read-16k-blocks-8c]
-wait_for_previous
-rw=read
-iodepth=8
-
-[sequential-read-16k-blocks-16c]
-wait_for_previous
-rw=read
-blocksize=16k
-iodepth=16
-
-[sequential-read-16k-blocks-32c]
-wait_for_previous
-rw=read
-blocksize=16k
-iodepth=32
-
-[sequential-read-16k-blocks-64c]
-wait_for_previous
-rw=read
-blocksize=16k
-iodepth=64
+# [sequential-read-4k-blocks-1c]
+# wait_for_previous
+# rw=read
+# blocksize=4k
+# iodepth=1
+#
+# [sequential-read-4k-blocks-2c]
+# wait_for_previous
+# rw=read
+# blocksize=4k
+# iodepth=2
+#
+# [sequential-read-4k-blocks-4c]
+# wait_for_previous
+# rw=read
+# blocksize=4k
+# iodepth=4
+#
+# [sequential-read-4k-blocks-8c]
+# wait_for_previous
+# rw=read
+# blocksize=4k
+# iodepth=8
+#
+# [sequential-read-4k-blocks-16c]
+# wait_for_previous
+# rw=read
+# blocksize=4k
+# iodepth=16
+#
+# [sequential-read-4k-blocks-32c]
+# wait_for_previous
+# rw=read
+# blocksize=4k
+# iodepth=32
+#
+# [sequential-read-4k-blocks-64c]
+# wait_for_previous
+# rw=read
+# blocksize=4k
+# iodepth=64
+#
+# [sequential-read-8k-blocks-1c]
+# wait_for_previous
+# rw=read
+# blocksize=8k
+# iodepth=1
+#
+# [sequential-read-8k-blocks-2c]
+# wait_for_previous
+# rw=read
+# blocksize=8k
+# iodepth=2
+#
+# [sequential-read-8k-blocks-4c]
+# wait_for_previous
+# rw=read
+# blocksize=8k
+# iodepth=4
+#
+# [sequential-read-8k-blocks-8c]
+# wait_for_previous
+# rw=read
+# blocksize=8k
+# iodepth=8
+#
+# [sequential-read-8k-blocks-16c]
+# wait_for_previous
+# rw=read
+# blocksize=8k
+# iodepth=16
+#
+# [sequential-read-8k-blocks-32c]
+# wait_for_previous
+# rw=read
+# blocksize=8k
+# iodepth=32
+#
+# [sequential-read-8k-blocks-64c]
+# wait_for_previous
+# rw=read
+# blocksize=8k
+# iodepth=64
+#
+# [sequential-read-16k-blocks-1c]
+# wait_for_previous
+# rw=read
+# blocksize=16k
+# iodepth=1
+#
+# [sequential-read-16k-blocks-2c]
+# wait_for_previous
+# rw=read
+# blocksize=16k
+# iodepth=2
+#
+# [sequential-read-16k-blocks-4c]
+# wait_for_previous
+# rw=read
+# blocksize=16k
+# iodepth=4
+#
+# [sequential-read-16k-blocks-8c]
+# wait_for_previous
+# rw=read
+# iodepth=8
+#
+# [sequential-read-16k-blocks-16c]
+# wait_for_previous
+# rw=read
+# blocksize=16k
+# iodepth=16
+#
+# [sequential-read-16k-blocks-32c]
+# wait_for_previous
+# rw=read
+# blocksize=16k
+# iodepth=32
+#
+# [sequential-read-16k-blocks-64c]
+# wait_for_previous
+# rw=read
+# blocksize=16k
+# iodepth=64
 
 [random-write-4k-blocks-1c]
 wait_for_previous
@@ -348,168 +380,168 @@ rw=randwrite
 blocksize=8k
 iodepth=64
 
-[random-write-16k-blocks-1c]
-wait_for_previous
-rw=randwrite
-blocksize=16k
-iodepth=1
-
-[random-write-16k-blocks-2c]
-wait_for_previous
-rw=randwrite
-blocksize=16k
-iodepth=2
-
-[random-write-16k-blocks-4c]
-wait_for_previous
-rw=randwrite
-blocksize=16k
-iodepth=4
-
-[random-write-16k-blocks-8c]
-wait_for_previous
-rw=randwrite
-iodepth=8
-
-[random-write-16k-blocks-16c]
-wait_for_previous
-rw=randwrite
-blocksize=16k
-iodepth=16
-
-[random-write-16k-blocks-32c]
-wait_for_previous
-rw=randwrite
-blocksize=16k
-iodepth=32
-
-[random-write-16k-blocks-64c]
-wait_for_previous
-rw=randwrite
-blocksize=16k
-iodepth=64
-
-[sequential-write-4k-blocks-1c]
-wait_for_previous
-rw=write
-blocksize=4k
-iodepth=1
-
-[sequential-write-4k-blocks-2c]
-wait_for_previous
-rw=write
-blocksize=4k
-iodepth=2
-
-[sequential-write-4k-blocks-4c]
-wait_for_previous
-rw=write
-blocksize=4k
-iodepth=4
-
-[sequential-write-4k-blocks-8c]
-wait_for_previous
-rw=write
-blocksize=4k
-iodepth=8
-
-[sequential-write-4k-blocks-16c]
-wait_for_previous
-rw=write
-blocksize=4k
-iodepth=16
-
-[sequential-write-4k-blocks-32c]
-wait_for_previous
-rw=write
-blocksize=4k
-iodepth=32
-
-[sequential-write-4k-blocks-64c]
-wait_for_previous
-rw=write
-blocksize=4k
-iodepth=64
-
-[sequential-write-8k-blocks-1c]
-wait_for_previous
-rw=write
-blocksize=8k
-iodepth=1
-
-[sequential-write-8k-blocks-2c]
-wait_for_previous
-rw=write
-blocksize=8k
-iodepth=2
-
-[sequential-write-8k-blocks-4c]
-wait_for_previous
-rw=write
-blocksize=8k
-iodepth=4
-
-[sequential-write-8k-blocks-8c]
-wait_for_previous
-rw=write
-blocksize=8k
-iodepth=8
-
-[sequential-write-8k-blocks-16c]
-wait_for_previous
-rw=write
-blocksize=8k
-iodepth=16
-
-[sequential-write-8k-blocks-32c]
-wait_for_previous
-rw=write
-blocksize=8k
-iodepth=32
-
-[sequential-write-8k-blocks-64c]
-wait_for_previous
-rw=write
-blocksize=8k
-iodepth=64
-
-[sequential-write-16k-blocks-1c]
-wait_for_previous
-rw=write
-blocksize=16k
-iodepth=1
-
-[sequential-write-16k-blocks-2c]
-wait_for_previous
-rw=write
-blocksize=16k
-iodepth=2
-
-[sequential-write-16k-blocks-4c]
-wait_for_previous
-rw=write
-blocksize=16k
-iodepth=4
-
-[sequential-write-16k-blocks-8c]
-wait_for_previous
-rw=write
-iodepth=8
-
-[sequential-write-16k-blocks-16c]
-wait_for_previous
-rw=write
-blocksize=16k
-iodepth=16
-
-[sequential-write-16k-blocks-32c]
-wait_for_previous
-rw=write
-blocksize=16k
-iodepth=32
-
-[sequential-write-16k-blocks-64c]
-wait_for_previous
-rw=write
-blocksize=16k
-iodepth=64
+# [random-write-16k-blocks-1c]
+# wait_for_previous
+# rw=randwrite
+# blocksize=16k
+# iodepth=1
+#
+# [random-write-16k-blocks-2c]
+# wait_for_previous
+# rw=randwrite
+# blocksize=16k
+# iodepth=2
+#
+# [random-write-16k-blocks-4c]
+# wait_for_previous
+# rw=randwrite
+# blocksize=16k
+# iodepth=4
+#
+# [random-write-16k-blocks-8c]
+# wait_for_previous
+# rw=randwrite
+# iodepth=8
+#
+# [random-write-16k-blocks-16c]
+# wait_for_previous
+# rw=randwrite
+# blocksize=16k
+# iodepth=16
+#
+# [random-write-16k-blocks-32c]
+# wait_for_previous
+# rw=randwrite
+# blocksize=16k
+# iodepth=32
+#
+# [random-write-16k-blocks-64c]
+# wait_for_previous
+# rw=randwrite
+# blocksize=16k
+# iodepth=64
+#
+# [sequential-write-4k-blocks-1c]
+# wait_for_previous
+# rw=write
+# blocksize=4k
+# iodepth=1
+#
+# [sequential-write-4k-blocks-2c]
+# wait_for_previous
+# rw=write
+# blocksize=4k
+# iodepth=2
+#
+# [sequential-write-4k-blocks-4c]
+# wait_for_previous
+# rw=write
+# blocksize=4k
+# iodepth=4
+#
+# [sequential-write-4k-blocks-8c]
+# wait_for_previous
+# rw=write
+# blocksize=4k
+# iodepth=8
+#
+# [sequential-write-4k-blocks-16c]
+# wait_for_previous
+# rw=write
+# blocksize=4k
+# iodepth=16
+#
+# [sequential-write-4k-blocks-32c]
+# wait_for_previous
+# rw=write
+# blocksize=4k
+# iodepth=32
+#
+# [sequential-write-4k-blocks-64c]
+# wait_for_previous
+# rw=write
+# blocksize=4k
+# iodepth=64
+#
+# [sequential-write-8k-blocks-1c]
+# wait_for_previous
+# rw=write
+# blocksize=8k
+# iodepth=1
+#
+# [sequential-write-8k-blocks-2c]
+# wait_for_previous
+# rw=write
+# blocksize=8k
+# iodepth=2
+#
+# [sequential-write-8k-blocks-4c]
+# wait_for_previous
+# rw=write
+# blocksize=8k
+# iodepth=4
+#
+# [sequential-write-8k-blocks-8c]
+# wait_for_previous
+# rw=write
+# blocksize=8k
+# iodepth=8
+#
+# [sequential-write-8k-blocks-16c]
+# wait_for_previous
+# rw=write
+# blocksize=8k
+# iodepth=16
+#
+# [sequential-write-8k-blocks-32c]
+# wait_for_previous
+# rw=write
+# blocksize=8k
+# iodepth=32
+#
+# [sequential-write-8k-blocks-64c]
+# wait_for_previous
+# rw=write
+# blocksize=8k
+# iodepth=64
+#
+# [sequential-write-16k-blocks-1c]
+# wait_for_previous
+# rw=write
+# blocksize=16k
+# iodepth=1
+#
+# [sequential-write-16k-blocks-2c]
+# wait_for_previous
+# rw=write
+# blocksize=16k
+# iodepth=2
+#
+# [sequential-write-16k-blocks-4c]
+# wait_for_previous
+# rw=write
+# blocksize=16k
+# iodepth=4
+#
+# [sequential-write-16k-blocks-8c]
+# wait_for_previous
+# rw=write
+# iodepth=8
+#
+# [sequential-write-16k-blocks-16c]
+# wait_for_previous
+# rw=write
+# blocksize=16k
+# iodepth=16
+#
+# [sequential-write-16k-blocks-32c]
+# wait_for_previous
+# rw=write
+# blocksize=16k
+# iodepth=32
+#
+# [sequential-write-16k-blocks-64c]
+# wait_for_previous
+# rw=write
+# blocksize=16k
+# iodepth=64

@@ -25,7 +25,7 @@ for f in glob.iglob("runs/*.tar.gz"):
         entry["write_lat (usec)"] = int(job['write']['clat_ns']['mean'] / 1000)
         out.append(entry)
 
-    out_csv = 'out/' + os.path.basename(f).split(".", 1)[0] + ".csv"
+    out_csv = 'out/' + os.path.basename(f).rsplit(".", 1)[0] + ".csv"
     with open(out_csv, 'w', newline='') as csvfile:
         fieldnames=out[1].keys()
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
