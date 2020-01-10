@@ -1,5 +1,7 @@
 # fio-perf-aws-vs-hetzner
 
+NOTE: Testing through ext4 and not raw block device
+
 ```
 docker run --rm -d --privileged=true -v /dev:/dev -v /pv-disks/772392d3-35ed-47b0-8d51-25423b12c04a/:/testfolder eu.gcr.io/brunsgaard-public/fio-tester i3en.6xlarge
 ```
@@ -13,7 +15,7 @@ end
 ```
 
 ```
-out/i3en.6xlarge.ioperf.tar.csv
+out/aws.i3en.6xlarge.ioperf.tar.csv
 | jobname                    | read_iops | read_bw (MiB/s) | read_lat (usec) | write_iops | write_bw (MiB/s) | write_lat (usec) |
 | -------------------------- | --------- | --------------- | --------------- | ---------- | ---------------- | ---------------- |
 | mh-estimation-test         |    60,660 |             948 |          14,788 |     10,707 |              167 |           11,791 |
@@ -55,7 +57,7 @@ out/i3en.6xlarge.ioperf.tar.csv
 | random-write-8k-blocks-32c |         0 |               0 |               0 |    143,846 |            1,123 |              216 |
 | random-write-8k-blocks-64c |         0 |               0 |               0 |    144,117 |            1,125 |              438 |
 
-out/EX52-NVMe.ioperf.tar.csv
+out/hetzner.EX52-NVMe.ioperf.tar.csv
 | jobname                    | read_iops | read_bw (MiB/s) | read_lat (usec) | write_iops | write_bw (MiB/s) | write_lat (usec) |
 | -------------------------- | --------- | --------------- | --------------- | ---------- | ---------------- | ---------------- |
 | mh-estimation-test         |   249,949 |           3,905 |           3,578 |     44,129 |              689 |            2,879 |
@@ -96,4 +98,46 @@ out/EX52-NVMe.ioperf.tar.csv
 | random-write-8k-blocks-16c |         0 |               0 |               0 |    239,040 |            1,867 |               63 |
 | random-write-8k-blocks-32c |         0 |               0 |               0 |    241,925 |            1,890 |              128 |
 | random-write-8k-blocks-64c |         0 |               0 |               0 |    241,597 |            1,887 |              261 |
+
+out/hetzner.px-92.ioperf.tar.csv
+| jobname                    | read_iops | read_bw (MiB/s) | read_lat (usec) | write_iops | write_bw (MiB/s) | write_lat (usec) |
+| -------------------------- | --------- | --------------- | --------------- | ---------- | ---------------- | ---------------- |
+| mh-estimation-test         |   119,356 |           1,865 |           7,270 |     21,092 |              329 |            6,669 |
+| google-iops-randread-perf  |   669,721 |           2,616 |             759 |          0 |                0 |                0 |
+| google-iops-randwrite-perf |         0 |               0 |               0 |    340,278 |            1,329 |            1,498 |
+| random-read-4k-blocks-1c   |    11,363 |              44 |              79 |          0 |                0 |                0 |
+| random-read-4k-blocks-2c   |    22,470 |              87 |              80 |          0 |                0 |                0 |
+| random-read-4k-blocks-4c   |    46,448 |             181 |              79 |          0 |                0 |                0 |
+| random-read-4k-blocks-8c   |    99,544 |             388 |              77 |          0 |                0 |                0 |
+| random-read-4k-blocks-16c  |   189,489 |             740 |              81 |          0 |                0 |                0 |
+| random-read-4k-blocks-32c  |   276,488 |           1,080 |             112 |          0 |                0 |                0 |
+| random-read-4k-blocks-64c  |   279,695 |           1,092 |             226 |          0 |                0 |                0 |
+| random-read-8k-blocks-1c   |    10,683 |              83 |              84 |          0 |                0 |                0 |
+| random-read-8k-blocks-2c   |    21,052 |             164 |              85 |          0 |                0 |                0 |
+| random-read-8k-blocks-4c   |    42,419 |             331 |              87 |          0 |                0 |                0 |
+| random-read-8k-blocks-8c   |    86,970 |             679 |              88 |          0 |                0 |                0 |
+| random-read-8k-blocks-16c  |   156,647 |           1,223 |              99 |          0 |                0 |                0 |
+| random-read-8k-blocks-32c  |   245,918 |           1,921 |             127 |          0 |                0 |                0 |
+| random-read-8k-blocks-64c  |   270,419 |           2,112 |             233 |          0 |                0 |                0 |
+| random-read-16k-blocks-1c  |     9,945 |             155 |              90 |          0 |                0 |                0 |
+| random-read-16k-blocks-2c  |    19,531 |             305 |              92 |          0 |                0 |                0 |
+| random-read-16k-blocks-4c  |    37,728 |             589 |              97 |          0 |                0 |                0 |
+| random-read-16k-blocks-8c  |    99,659 |             389 |              77 |          0 |                0 |                0 |
+| random-read-16k-blocks-16c |   115,920 |           1,811 |             134 |          0 |                0 |                0 |
+| random-read-16k-blocks-32c |   164,679 |           2,573 |             191 |          0 |                0 |                0 |
+| random-read-16k-blocks-64c |   203,199 |           3,175 |             311 |          0 |                0 |                0 |
+| random-write-4k-blocks-1c  |         0 |               0 |               0 |     58,138 |              227 |               13 |
+| random-write-4k-blocks-2c  |         0 |               0 |               0 |     96,168 |              375 |               17 |
+| random-write-4k-blocks-4c  |         0 |               0 |               0 |    250,684 |              979 |               13 |
+| random-write-4k-blocks-8c  |         0 |               0 |               0 |    258,831 |            1,011 |               27 |
+| random-write-4k-blocks-16c |         0 |               0 |               0 |    257,797 |            1,007 |               59 |
+| random-write-4k-blocks-32c |         0 |               0 |               0 |    258,292 |            1,008 |              120 |
+| random-write-4k-blocks-64c |         0 |               0 |               0 |    257,851 |            1,007 |              245 |
+| random-write-8k-blocks-1c  |         0 |               0 |               0 |     49,097 |              383 |               15 |
+| random-write-8k-blocks-2c  |         0 |               0 |               0 |    114,580 |              895 |               14 |
+| random-write-8k-blocks-4c  |         0 |               0 |               0 |    214,969 |            1,679 |               15 |
+| random-write-8k-blocks-8c  |         0 |               0 |               0 |    228,999 |            1,789 |               31 |
+| random-write-8k-blocks-16c |         0 |               0 |               0 |    238,737 |            1,865 |               63 |
+| random-write-8k-blocks-32c |         0 |               0 |               0 |    244,588 |            1,910 |              127 |
+| random-write-8k-blocks-64c |         0 |               0 |               0 |    239,822 |            1,873 |              263 |
 ```
