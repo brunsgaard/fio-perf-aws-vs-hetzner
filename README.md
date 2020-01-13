@@ -1,11 +1,16 @@
 # fio-perf-aws-vs-hetzner
 
-NOTE: Testing through ext4 and not raw block device
+Flexible I/O tester used to test IOPS and bandwidth on NVMe devices formattet with ext4.
+If multiple disks are available to the machine a raid0 device has been created and used for the tests.
 
+To perform a test, use the command below
 ```
 docker run --rm -d --privileged=true -v /dev:/dev -v /pv-disks/772392d3-35ed-47b0-8d51-25423b12c04a/:/testfolder eu.gcr.io/brunsgaard-public/fio-tester i3en.6xlarge
 ```
 
+After the test you will find `/pv-disks/772392d3-35ed-47b0-8d51-25423b12c04a/i3en.6xlarge.ioperf.tar.gz`, move this file to the datafolder and run the `python3 generate_csv_output.py`
+
+You can install csvkit and use `csvlook` for pretty print the csv output files.
 ```fish
 for f in (find out -type f)
     echo $f
@@ -14,8 +19,19 @@ for f in (find out -type f)
 end
 ```
 
+### Conclusion
+It is hard to do a fair comparision but is seems like latency is higher on the
+AWS NVMes. The higher latency results in fewer IOPS and therefore less
+throughput. Note that aws.m5d.2xlarge.ioperf.csv is the only test performed on
+a single disk instead of a raid0 device with two disks. The i3en instances look
+to perform okey but it is shame that you need to allocate `2 x 7,500 GB NVMe SSD`
+to get that performence.
+
+### Output numbers
+Below you find the results of the experiments.
+
 ```
-out/aws.i3en.6xlarge.ioperf.tar.csv
+out/aws.i3en.6xlarge.ioperf.csv
 | jobname                    | read_iops | read_bw (MiB/s) | read_lat (usec) | write_iops | write_bw (MiB/s) | write_lat (usec) |
 | -------------------------- | --------- | --------------- | --------------- | ---------- | ---------------- | ---------------- |
 | mh-estimation-test         |    60,660 |             948 |          14,788 |     10,707 |              167 |           11,791 |
@@ -57,7 +73,49 @@ out/aws.i3en.6xlarge.ioperf.tar.csv
 | random-write-8k-blocks-32c |         0 |               0 |               0 |    143,846 |            1,123 |              216 |
 | random-write-8k-blocks-64c |         0 |               0 |               0 |    144,117 |            1,125 |              438 |
 
-out/hetzner.EX52-NVMe.ioperf.tar.csv
+out/aws.m5d.2xlarge.ioperf.csv
+| jobname                    | read_iops | read_bw (MiB/s) | read_lat (usec) | write_iops | write_bw (MiB/s) | write_lat (usec) |
+| -------------------------- | --------- | --------------- | --------------- | ---------- | ---------------- | ---------------- |
+| mh-estimation-test         |    33,050 |             516 |          26,600 |      5,864 |               91 |           21,914 |
+| google-iops-randread-perf  |   118,681 |             463 |           4,281 |          0 |                0 |                0 |
+| google-iops-randwrite-perf |         0 |               0 |               0 |     57,019 |              222 |            8,908 |
+| random-read-4k-blocks-1c   |    11,151 |              43 |              86 |          0 |                0 |                0 |
+| random-read-4k-blocks-2c   |    22,128 |              86 |              87 |          0 |                0 |                0 |
+| random-read-4k-blocks-4c   |    42,917 |             167 |              90 |          0 |                0 |                0 |
+| random-read-4k-blocks-8c   |    79,621 |             311 |              97 |          0 |                0 |                0 |
+| random-read-4k-blocks-16c  |   117,932 |             460 |             131 |          0 |                0 |                0 |
+| random-read-4k-blocks-32c  |   117,160 |             457 |             269 |          0 |                0 |                0 |
+| random-read-4k-blocks-64c  |   117,160 |             457 |             542 |          0 |                0 |                0 |
+| random-read-8k-blocks-1c   |    10,445 |              81 |              92 |          0 |                0 |                0 |
+| random-read-8k-blocks-2c   |    20,466 |             159 |              94 |          0 |                0 |                0 |
+| random-read-8k-blocks-4c   |    38,703 |             302 |             100 |          0 |                0 |                0 |
+| random-read-8k-blocks-8c   |    67,858 |             530 |             114 |          0 |                0 |                0 |
+| random-read-8k-blocks-16c  |    66,135 |             516 |             238 |          0 |                0 |                0 |
+| random-read-8k-blocks-32c  |    66,135 |             516 |             480 |          0 |                0 |                0 |
+| random-read-8k-blocks-64c  |    66,135 |             516 |             964 |          0 |                0 |                0 |
+| random-read-16k-blocks-1c  |     9,519 |             148 |             101 |          0 |                0 |                0 |
+| random-read-16k-blocks-2c  |    18,596 |             290 |             104 |          0 |                0 |                0 |
+| random-read-16k-blocks-4c  |    32,605 |             509 |             119 |          0 |                0 |                0 |
+| random-read-16k-blocks-8c  |    79,408 |             310 |              97 |          0 |                0 |                0 |
+| random-read-16k-blocks-16c |    33,067 |             516 |             480 |          0 |                0 |                0 |
+| random-read-16k-blocks-32c |    33,067 |             516 |             964 |          0 |                0 |                0 |
+| random-read-16k-blocks-64c |    33,066 |             516 |           1,931 |          0 |                0 |                0 |
+| random-write-4k-blocks-1c  |         0 |               0 |               0 |     33,416 |              130 |               26 |
+| random-write-4k-blocks-2c  |         0 |               0 |               0 |     58,278 |              227 |               31 |
+| random-write-4k-blocks-4c  |         0 |               0 |               0 |     57,026 |              222 |               66 |
+| random-write-4k-blocks-8c  |         0 |               0 |               0 |     57,026 |              222 |              136 |
+| random-write-4k-blocks-16c |         0 |               0 |               0 |     57,026 |              222 |              277 |
+| random-write-4k-blocks-32c |         0 |               0 |               0 |     57,026 |              222 |              557 |
+| random-write-4k-blocks-64c |         0 |               0 |               0 |     57,024 |              222 |            1,118 |
+| random-write-8k-blocks-1c  |         0 |               0 |               0 |     31,157 |              243 |               28 |
+| random-write-8k-blocks-2c  |         0 |               0 |               0 |     32,173 |              251 |               58 |
+| random-write-8k-blocks-4c  |         0 |               0 |               0 |     32,173 |              251 |              120 |
+| random-write-8k-blocks-8c  |         0 |               0 |               0 |     32,173 |              251 |              245 |
+| random-write-8k-blocks-16c |         0 |               0 |               0 |     32,173 |              251 |              493 |
+| random-write-8k-blocks-32c |         0 |               0 |               0 |     32,173 |              251 |              990 |
+| random-write-8k-blocks-64c |         0 |               0 |               0 |     32,172 |              251 |            1,985 |
+
+out/hetzner.EX52-NVMe.ioperf.csv
 | jobname                    | read_iops | read_bw (MiB/s) | read_lat (usec) | write_iops | write_bw (MiB/s) | write_lat (usec) |
 | -------------------------- | --------- | --------------- | --------------- | ---------- | ---------------- | ---------------- |
 | mh-estimation-test         |   249,949 |           3,905 |           3,578 |     44,129 |              689 |            2,879 |
@@ -99,7 +157,7 @@ out/hetzner.EX52-NVMe.ioperf.tar.csv
 | random-write-8k-blocks-32c |         0 |               0 |               0 |    241,925 |            1,890 |              128 |
 | random-write-8k-blocks-64c |         0 |               0 |               0 |    241,597 |            1,887 |              261 |
 
-out/hetzner.px-92.ioperf.tar.csv
+out/hetzner.px-92.ioperf.csv
 | jobname                    | read_iops | read_bw (MiB/s) | read_lat (usec) | write_iops | write_bw (MiB/s) | write_lat (usec) |
 | -------------------------- | --------- | --------------- | --------------- | ---------- | ---------------- | ---------------- |
 | mh-estimation-test         |   119,356 |           1,865 |           7,270 |     21,092 |              329 |            6,669 |
@@ -141,3 +199,7 @@ out/hetzner.px-92.ioperf.tar.csv
 | random-write-8k-blocks-32c |         0 |               0 |               0 |    244,588 |            1,910 |              127 |
 | random-write-8k-blocks-64c |         0 |               0 |               0 |    239,822 |            1,873 |              263 |
 ```
+
+# Helpfull links:
+
+- https://wiki.mikejung.biz/Benchmarking
